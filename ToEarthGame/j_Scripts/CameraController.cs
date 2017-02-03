@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     public GameObject player;
+    public GameObject obstacleManager;
 
     private Vector3 offset;
     
@@ -21,5 +22,6 @@ public class CameraController : MonoBehaviour {
     // guaranteed to run after all items have been processed in Update
     void LateUpdate() {
         transform.position = player.transform.position + offset;
+        obstacleManager.transform.Translate(player.transform.position - obstacleManager.transform.position);
     }
 }

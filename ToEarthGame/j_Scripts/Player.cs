@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour {
 
     public float speed;             //Floating point variable to store the player's movement speed.
-    // private Animator[] anims;
     private Animator leftFireAnim;
     private Animator rightFireAnim;
     private Animator playerAnim;
@@ -23,7 +22,6 @@ public class Player : MonoBehaviour {
     {
         //Get and store a reference to the Rigidbody2D component so that we can access it.
         rb2d = GetComponent<Rigidbody2D>();
-        // anims = GetComponentsInChildren<Animator>();
 
         // 자식 GameObject를 찾아 각각에 설정된 Animator 컴포넌트를 얻음
         // TODO: 각 GameObject 하위 스크립트로 분리하는 방향도 검토할 것
@@ -73,30 +71,7 @@ public class Player : MonoBehaviour {
         {
             leftFireAnim.SetBool("Left", false);
         }
-
-        /*
-        foreach(Animator anim in anims)
-        {
-            anim.SetFloat("Speed", rb2d.velocity.SqrMagnitude());
-
-            if (Input.GetKeyDown(KeyCode.RightArrow))
-            {
-                anim.SetBool("Right", true);
-            }
-            if (Input.GetKeyUp(KeyCode.RightArrow))
-            {
-                anim.SetBool("Right", false);
-            }
-            if (Input.GetKeyDown(KeyCode.LeftArrow))
-            {
-                anim.SetBool("Left", true);
-            }
-            if (Input.GetKeyUp(KeyCode.LeftArrow))
-            {
-                anim.SetBool("Left", false);
-            }
-        }
-        */
+        
     }
 
     void OnTriggerEnter2D(Collider2D collision)
