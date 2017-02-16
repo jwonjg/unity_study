@@ -16,6 +16,9 @@ public class Player : MonoBehaviour {
     public Text winText;
     private int countHint;
     private int totalHint;
+    
+    private ControllerLeft controllerLeft;
+    private ControllerLeft controllerRight;
 
     // Use this for initialization
     void Start()
@@ -34,6 +37,9 @@ public class Player : MonoBehaviour {
         winText.text = "";
         countHint = 0;
         setHintText();
+
+        controllerLeft = GameObject.Find("ControllerLeft").GetComponent<ControllerLeft>();
+        controllerRight = GameObject.Find("ControllerRight").GetComponent<ControllerLeft>();
     }
 
     //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
@@ -47,9 +53,20 @@ public class Player : MonoBehaviour {
 
         //Use the two store floats to create a new Vector2 variable movement.
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+        rb2d.AddForce(movement * speed);
 
         //Call the AddForce function of our Rigidbody2D rb2d supplying movement multiplied by speed to move our player.
-        rb2d.AddForce(movement * speed);
+        //rb2d.AddForce(movement * speed);
+
+        if (controllerLeft.IsPressed())
+        {
+            rb2d.AddForce(new Vector2(-speed, speed));
+        }
+
+        if (controllerRight.IsPressed())
+        {
+            rb2d.AddForce(new Vector2(speed, speed));
+        }
 
         leftFireAnim.SetFloat("Speed", rb2d.velocity.SqrMagnitude());
         rightFireAnim.SetFloat("Speed", rb2d.velocity.SqrMagnitude());
@@ -77,7 +94,6 @@ public class Player : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("HintTag")) {
-            collision.gameObject.SetActive(false);
             countHint++;
             setHintText();
         } else if (collision.gameObject.CompareTag("ObstacleTag"))

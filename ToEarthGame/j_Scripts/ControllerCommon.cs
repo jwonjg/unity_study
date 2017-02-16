@@ -3,30 +3,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Controller : MonoBehaviour {
+public abstract class ControllerCommon : MonoBehaviour
+{
 
     public bool isMobile;
+    public float pressParamSpeed;
+
+    protected float pressParam;
+    protected Animator animator;
+
+    private bool isDetect;
 
     private static readonly int CONTROLLER_NORMAL = 0;
     private static readonly int CONTROLLER_PRESS = 1;
     private static readonly int CONTROLLER_PRESSING = 2;
     private static readonly int CONTROLLER_RELEASE = 3;
 
+    // TODO: 스크립트가 각 GameObject 마다 별개로 복사되는지 확인 필요
     private int controllerState = CONTROLLER_NORMAL;
 
     // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (isMobile)
         {
             detectTouch();
-        } else
+        }
+        else
         {
             detectMouse();
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (isDetect)
+        {
+            press();
+        }
+        else
+        {
+            release();
         }
     }
 
@@ -38,16 +61,14 @@ public class Controller : MonoBehaviour {
             Collider2D coll = Physics2D.OverlapPoint(tapPoint);
             if (coll && coll.gameObject == gameObject)
             {
-                Debug.Log("CONTROLLER_PRESS");
-                controllerState = CONTROLLER_PRESS;
+                isDetect = true;
             }
         }
         else
         {
-            if (Input.GetMouseButtonUp(0) && (controllerState == CONTROLLER_PRESS || controllerState == CONTROLLER_PRESSING))
+            if (Input.GetMouseButtonUp(0))
             {
-                Debug.Log("CONTROLLER_RELEASE");
-                controllerState = CONTROLLER_RELEASE;
+                isDetect = false;
             }
         }
     }
@@ -64,14 +85,13 @@ public class Controller : MonoBehaviour {
                 break;
             }
         }
-        if(isAnyTouch && (controllerState == CONTROLLER_NORMAL || controllerState == CONTROLLER_RELEASE))
+        if (isAnyTouch && (controllerState == CONTROLLER_NORMAL || controllerState == CONTROLLER_RELEASE))
         {
-            Debug.Log("CONTROLLER_PRESS");
-            controllerState = CONTROLLER_PRESS;
-        } else if(controllerState == CONTROLLER_PRESS || controllerState == CONTROLLER_PRESSING)
+            press();
+        }
+        else if (controllerState == CONTROLLER_PRESS || controllerState == CONTROLLER_PRESSING)
         {
-            Debug.Log("CONTROLLER_RELEASE");
-            controllerState = CONTROLLER_RELEASE;
+            release();
         }
     }
 
@@ -88,9 +108,7 @@ public class Controller : MonoBehaviour {
             return false;
         }
     }
-    
-    public bool isPress()
-    {
-        return controllerState == CONTROLLER_PRESSING;
-    }
+
+    protected abstract void press();
+    protected abstract void release();
 }

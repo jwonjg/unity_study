@@ -103,7 +103,7 @@ public class Player : MonoBehaviour {
 
     void OnTriggerEnter2D (Collider2D other) {
         if (other.gameObject.CompareTag ("Hint")) {
-            other.gameObject.SetActive (false);
+            //other.gameObject.SetActive (false);
             countHint++;
             setCountText();
         } else if (other.gameObject.CompareTag ("Obstacle")) {

@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour {
 
     public GameObject player;
     public GameObject obstacleManager;
-
     private Vector3 offset;
     
 	// Use this for initialization
